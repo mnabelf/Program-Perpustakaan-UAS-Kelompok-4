@@ -1,0 +1,191 @@
+#include <iostream>
+using namespace std;
+
+//Structure untuk node linked list
+struct Buku {
+    int id;
+    string judul;
+    string penulis;
+    Buku* next;
+};
+
+//Deklarasi Kelas private dan public
+class Perpustakaan {
+private:
+    Buku* head;
+public:
+    Perpustakaan() : head(NULL) {}
+
+//Function untuk menambahkan data buku
+    void tambahBuku(int id, string judul, string penulis) {
+        Buku* bukuBaru = new Buku{id, judul, penulis, NULL};
+        if (!head) {
+            head = bukuBaru;
+        } else {
+            Buku* temp = head;
+            while (temp->next != NULL) {
+                temp = temp->next;
+            }
+            temp->next = bukuBaru;
+        }
+        cout << endl;
+    }
+
+//function untuk menghapus data buku
+    void hapusBuku(int id) {
+        if (!head) return;
+        if (head->id == id) {
+            Buku* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+        Buku* current = head;
+        Buku* previous = NULL;
+        while (current != NULL && current->id != id) {
+            previous = current;
+            current = current->next;
+        }
+        if (current) {
+            previous->next = current->next;
+            delete current;
+        }
+        cout << endl;
+    }
+
+//function untuk menampilkan seluruh data buku
+    void tampilkanBuku() {
+        Buku* temp = head;
+        while (temp != NULL) {
+            cout << temp->id << "\t\t" << temp->judul << "\t\t" << temp->penulis << endl;
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+
+//function LINEAR SEARCH untuk mencari data buku
+    Buku* cariBuku(string judul) {
+        Buku* temp = head;
+        while (temp != NULL) {
+            if (temp->judul == judul) {
+                return temp;
+            }
+            temp = temp->next;
+        }
+        cout << endl;
+        return NULL;
+    }
+
+    Buku* cariBukuID(int id) {
+        Buku* temp = head;
+        while (temp != NULL) {
+            if (temp->id == id) {
+                return temp;
+            }
+            temp = temp->next;
+        }
+        cout << endl;
+        return NULL;
+    }
+};
+
+int main() {
+    Perpustakaan perpustakaan;
+    int pilihan;
+    cout<<"\t\t ======= Program Perpustakaan ========\n\n";
+    cout << "Tekan tombol apa saja untuk mulai\n\n\n";
+    system("pause");
+    system("cls");
+    do {
+        cout<<"\t\t ======= Program Perpustakaan ========\n\n";
+        cout << "\n1. Tambah Buku\n2. Hapus Buku\n3. Cari Buku (Judul)\n4. Cari Buku (ID)\n5. Tampilkan Buku\n6. Keluar\n\nPilih opsi: ";
+        cin >> pilihan;
+        switch (pilihan) {
+            case 1: {
+                int id;
+                string judul, penulis;
+                system("cls");
+                cout<<"\t\t======= Tambah Data Buku ========\n\n";
+                cout << "Masukkan ID Buku\t\t: ";
+                cin >> id;
+                cout << "Masukkan Judul Buku\t\t: ";
+                cin.ignore();
+                getline(cin, judul);
+                cout << "Masukkan Penulis Buku\t\t: ";
+                getline(cin, penulis);
+                perpustakaan.tambahBuku(id, judul, penulis);
+                cout << "\n\n Data buku berhasil tersimpan \n\n\n" << endl;
+				system("pause");
+				system("cls");
+                break;
+            }
+            case 2: {
+                int id;
+                system("cls");
+                cout<<"\t\t======= Hapus Data Buku ========\n\n";
+                cout << "Masukkan ID Buku yang akan dihapus: ";
+                cin >> id;
+                perpustakaan.hapusBuku(id);
+                cout << "\n\n Data buku berhasil terhapus \n\n\n" << endl;
+				system("pause");
+				system("cls");
+                break;
+            }
+            case 3: {
+                string judul;
+                system("cls");
+                cout<<"\t\t======= Cari Data Buku ========\n\n";
+                cout << "Masukkan Judul Buku yang dicari: ";
+                cin.ignore();
+                getline(cin, judul);
+                Buku* buku = perpustakaan.cariBuku(judul);
+                if (buku) {
+                    cout << "\n\n Data buku berhasil ditemukan \n" << endl;
+                    cout << "ID\t\t: " << buku->id << "\nJudul\t\t: " << buku->judul << "\nPenulis\t\t: " << buku->penulis << "\n\n\n";
+                } else {
+                    cout << "\n\n Data buku tidak ditemukan \n\n\n" << endl;
+                }
+				system("pause");
+				system("cls");
+                break;
+            }
+            case 4: {
+                int id;
+                system("cls");
+                cout<<"\t\t======= Cari Data Buku ========\n\n";
+                cout << "Masukkan ID Buku yang dicari: ";
+                cin.ignore();
+                cin >> id;
+                Buku* buku = perpustakaan.cariBukuID(id);
+                if (buku) {
+                    cout << "\n\n Data buku berhasil ditemukan \n" << endl;
+                    cout << "ID\t\t: " << buku->id << "\nJudul\t\t: " << buku->judul << "\nPenulis\t\t: " << buku->penulis << "\n\n\n";
+                } else {
+                    cout << "\n\n Data buku tidak ditemukan \n\n\n" << endl;
+                }
+				system("pause");
+				system("cls");
+                break;
+            }
+            case 5: {
+                system("cls");
+                cout<<"------------------------------------------------------------------\n";
+		cout<<" ID Buku\tJudul Buku\t\t\tPenulis Buku\n";
+		cout<<"------------------------------------------------------------------\n";
+                perpustakaan.tampilkanBuku();
+                system("pause");
+				system("cls");
+                break;
+            }
+            case 6: {
+                cout << "Keluar Program" << endl;
+                break;
+            }
+            default:
+                cout << "Pilihan tidak valid" << endl;
+                system("pause");
+				system("cls");
+        }
+    } while (pilihan != 6);
+    return 0;
+}
